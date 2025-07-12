@@ -1,5 +1,12 @@
 <?php
-require_once __DIR__ . '/../../config/database.php';
+// Include the correct database configuration for the environment
+if (getenv('DATABASE_URL')) {
+    // Production environment (Render.com with Docker)
+    require_once __DIR__ . '/../../config/database-docker.php';
+} else {
+    // Local development environment
+    require_once __DIR__ . '/../../config/database.php';
+}
 
 class Task {
     private $db;

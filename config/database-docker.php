@@ -12,6 +12,9 @@ class Database {
         // Parse DATABASE_URL environment variable (for Render.com)
         $database_url = getenv('DATABASE_URL');
         
+        // Debug logging
+        error_log("DATABASE_URL: " . ($database_url ? "Found" : "Not found"));
+        
         if ($database_url) {
             // Production environment (Render.com with PostgreSQL)
             $url = parse_url($database_url);
@@ -21,6 +24,9 @@ class Database {
             $this->username = $url['user'];
             $this->password = $url['pass'];
             $this->isPostgreSQL = true;
+            
+            // Debug logging
+            error_log("PostgreSQL config - Host: {$this->host}, Port: {$this->port}, DB: {$this->db_name}");
         } else {
             // Local development environment (MySQL)
             $this->host = 'localhost';
@@ -29,6 +35,9 @@ class Database {
             $this->password = '';
             $this->port = 3306;
             $this->isPostgreSQL = false;
+            
+            // Debug logging
+            error_log("MySQL config - Host: {$this->host}, Port: {$this->port}, DB: {$this->db_name}");
         }
     }
 
@@ -39,13 +48,18 @@ class Database {
             if ($this->isPostgreSQL) {
                 // PostgreSQL for production (Render.com)
                 $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
+                error_log("Attempting PostgreSQL connection with DSN: " . $dsn);
             } else {
                 // MySQL for local development
                 $dsn = "mysql:host={$this->host};dbname={$this->db_name}";
+                error_log("Attempting MySQL connection with DSN: " . $dsn);
             }
             
-            $this->conn = new PDO($dsn, $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn = new PDO($dsn, $this->username, $this->password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_TIMEOUT => 30
+            ]);
             
             // Set timezone
             if ($this->isPostgreSQL) {
@@ -54,8 +68,12 @@ class Database {
                 $this->conn->exec("SET time_zone = '+00:00'");
             }
             
+            error_log("Database connection successful!");
+            
         } catch(PDOException $exception) {
-            error_log("Connection error: " . $exception->getMessage());
+            error_log("Database connection error: " . $exception->getMessage());
+            error_log("DSN used: " . $dsn);
+            error_log("Username: " . $this->username);
             throw new Exception("Database connection failed: " . $exception->getMessage());
         }
 
