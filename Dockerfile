@@ -30,6 +30,8 @@ RUN composer install --no-dev --optimize-autoloader
 # Configure Apache
 RUN a2enmod rewrite headers
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/security.conf /etc/apache2/conf-available/security.conf
+RUN a2enconf security
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
