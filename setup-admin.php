@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$hasAdmins) {
                     <strong>System Already Configured</strong>
                     <p class="mb-0 mt-2">Admin users already exist in the system. For security reasons, new admin accounts can only be created by existing administrators through the admin panel.</p>
                     <div class="mt-3">
-                        <a href="/public/index.php" class="btn btn-primary">
+                        <a href="/index.php" class="btn btn-primary">
                             <i class="fas fa-sign-in-alt"></i> Go to Login
                         </a>
                     </div>
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$hasAdmins) {
                         <strong>Success!</strong>
                         <p class="mb-0 mt-2"><?= htmlspecialchars($success) ?></p>
                         <div class="mt-3">
-                            <a href="/public/index.php" class="btn btn-primary">
+                            <a href="/index.php" class="btn btn-primary">
                                 <i class="fas fa-sign-in-alt"></i> Login Now
                             </a>
                         </div>
