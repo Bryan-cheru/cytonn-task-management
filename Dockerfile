@@ -28,7 +28,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Configure Apache
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Set permissions

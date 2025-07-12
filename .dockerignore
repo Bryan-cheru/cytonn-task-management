@@ -3,6 +3,7 @@
 README.md
 .env
 .env.example
+.htaccess
 node_modules
 vendor
 logs/*
