@@ -9,13 +9,13 @@ class Database {
     private $isPostgreSQL = false;
 
     public function __construct() {
-        // Parse DATABASE_URL environment variable (for Render.com)
-        $database_url = getenv('DATABASE_URL');
+        // Force check for DATABASE_URL environment variable
+        $database_url = $_ENV['DATABASE_URL'] ?? getenv('DATABASE_URL') ?? null;
         
         // Debug logging
-        error_log("DATABASE_URL: " . ($database_url ? "Found" : "Not found"));
+        error_log("DATABASE_URL check: " . ($database_url ? "Found" : "Not found"));
         
-        if ($database_url) {
+        if ($database_url && strpos($database_url, 'postgres://') === 0) {
             // Production environment (Render.com with PostgreSQL)
             $url = parse_url($database_url);
             $this->host = $url['host'];
@@ -104,6 +104,20 @@ class Database {
             error_log("Database setup error: " . $e->getMessage());
             return false;
         }
+    }
+
+    public function testConnection() {
+        try {
+            $conn = $this->getConnection();
+            if ($conn) {
+                error_log("Database connection test successful");
+                return true;
+            }
+        } catch (Exception $e) {
+            error_log("Database connection test failed: " . $e->getMessage());
+            return false;
+        }
+        return false;
     }
 }
 ?>
