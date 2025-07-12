@@ -1,0 +1,45 @@
+# Cytonn Task Management System - Dependencies and Temporary Files
+# Ignore system files and sensitive data
+
+# System Files
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment and Configuration
+.env
+config/local.php
+
+# Logs and Temporary Files
+logs/*.log
+temp/
+cache/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+
+# Dependency Directories (if using composer)
+vendor/
+node_modules/
+
+# Database Backups
+*.sql.backup
+backup/
+
+# Email Attachments (if any)
+uploads/attachments/
+
+# Production Configuration Files
+config/production.php
+
+# Security - Never commit sensitive data
+**/smtp_credentials.php
+**/database_prod.php
+
+# OS Generated Files
+*.tmp
+*.cache
