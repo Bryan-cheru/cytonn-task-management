@@ -1,0 +1,7 @@
+# Render.com Deployment Configuration
+
+# Build Command
+composer install --no-dev --optimize-autoloader
+
+# Start Command  
+vendor/bin/heroku-php-apache2 public/

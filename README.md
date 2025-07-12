@@ -1,53 +1,247 @@
 # Cytonn Task Management System
 
-A comprehensive task management system built with PHP and Vue.js for the Cytonn Kenya internship challenge.
+A modern, feature-rich task management system built with PHP, MySQL/PostgreSQL, and Vue.js. Designed for the Cytonn Internship Challenge.
 
-## Features
+## 🚀 Live Demo
+- **Production URL**: [Will be available after Render.com deployment]
+- **Local Development**: http://localhost/cytonn/task-management-system/public/
 
-### Administrator Features
-- Add, edit, and delete users
-- Assign tasks to users with deadlines
-- Manage task statuses (Pending, In Progress, Completed)
-- View all tasks and user statistics
-- Dashboard with comprehensive overview
+## ✨ Features
 
-### User Features
-- View assigned tasks
-- Update task status
-- Receive email notifications for new task assignments
-- Dashboard with personal task overview
+### Core Functionality
+- **User Management**: Create, edit, and manage user accounts with role-based access
+- **Task Management**: Full CRUD operations for tasks with status tracking
+- **Dashboard**: Real-time statistics and task overview
+- **Email Notifications**: Automated SMTP notifications for task assignments
+- **Responsive Design**: Modern Vue.js interface with Bootstrap 5
 
 ### Technical Features
-- Object-Oriented PHP architecture
-- Vue.js for interactive frontend
-- Responsive Bootstrap UI
-- Email notifications system
-- MySQL database with proper relationships
+- **Modern Architecture**: MVC pattern with OOP PHP 8.0+
+- **Database Flexibility**: Supports both MySQL (local) and PostgreSQL (cloud)
+- **Cloud-Ready**: Configured for Render.com deployment
+- **Email System**: Gmail SMTP integration with TLS encryption
+- **Security**: Session-based authentication with proper validation
+
+## 🛠 Technology Stack
+
+### Backend
+- **PHP 8.0+** - Core application logic
+- **MySQL/PostgreSQL** - Database layer
+- **Composer** - Dependency management
+
+### Frontend
+- **Vue.js 3** - Interactive user interface
+- **Bootstrap 5.3.2** - Responsive design framework
+- **Font Awesome 6.4.0** - Icons and UI elements
+
+### Deployment
+- **Git** - Version control
+- **Render.com** - Cloud hosting platform
+- **XAMPP** - Local development environment
+
+## 📁 Project Structure
+
+```
+task-management-system/
+├── app/
+│   ├── Auth.php              # Authentication system
+│   ├── Models/
+│   │   ├── Task.php          # Task model and operations
+│   │   └── User.php          # User model and operations
+│   └── Services/
+│       └── EmailService.php  # SMTP email notifications
+├── config/
+│   ├── database.php          # MySQL configuration
+│   └── database-render.php   # PostgreSQL configuration
+├── database/
+│   ├── cytonn_task_management.sql  # MySQL schema
+│   └── postgres-schema.sql         # PostgreSQL schema
+├── public/
+│   ├── index.php            # Application entry point
+│   ├── dashboard.php        # Main dashboard interface
+│   ├── manage-tasks.php     # Task management interface
+│   ├── manage-users.php     # User management interface
+│   ├── my-tasks.php         # User task view
+│   ├── auth/
+│   │   ├── login.php        # Login interface
+│   │   └── logout.php       # Logout handler
+│   └── api/
+│       ├── delete-task.php       # Task deletion endpoint
+│       └── update-task-status.php # Status update endpoint
+├── composer.json            # Dependencies and autoloading
+├── render.yaml             # Render.com deployment config
+└── setup-render.php       # Database setup for deployment
+```
+
+## 🔧 Installation & Setup
+
+### Local Development
+
+1. **Prerequisites**
+   ```bash
+   - XAMPP (Apache + PHP 8.0+ + MySQL)
+   - Composer
+   - Git
+   ```
+
+2. **Clone Repository**
+   ```bash
+   git clone [your-repository-url]
+   cd task-management-system
+   ```
+
+3. **Install Dependencies**
+   ```bash
+   composer install
+   ```
+
+4. **Database Setup**
+   - Start XAMPP (Apache + MySQL)
+   - Import `database/cytonn_task_management.sql` into phpMyAdmin
+   - Update `config/database.php` with your MySQL credentials
+
+5. **Email Configuration**
+   - Update Gmail SMTP settings in `app/Services/EmailService.php`
+   - Use App Password for Gmail authentication
+
+6. **Access Application**
+### Cloud Deployment (Render.com)
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy to Render.com"
+   git push origin main
+   ```
+
+2. **Render.com Setup**
+   - Connect GitHub repository
+   - Service will auto-deploy using `render.yaml`
+   - PostgreSQL database will be automatically configured
+
+3. **Environment Variables**
+   ```
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_PORT=587
+   EMAIL_USERNAME=your-email@gmail.com
+   EMAIL_PASSWORD=your-app-password
+   ```
+
+## 💾 Database Schema
+
+### Users Table
+```sql
+- id (Primary Key)
+- first_name, last_name
+- email (Unique)
+- password (Hashed)
+- role (admin/user)
+- created_at, updated_at
+```
+
+### Tasks Table
+```sql
+- id (Primary Key)
+- title, description
+- assigned_to (Foreign Key → users.id)
+- status (pending/in_progress/completed)
+- priority (low/medium/high)
+- due_date
+- created_at, updated_at
+```
+
+## 🔐 Authentication & Security
+
+### Login Credentials
+**Admin Account:**
+- Email: admin@cytonn.com
+- Password: admin123
+
+**User Account:**
+- Email: user@cytonn.com
+- Password: user123
+
+### Security Features
+- Password hashing with PHP password_hash()
 - Session-based authentication
-- RESTful API endpoints
+- Role-based access control
+- SQL injection prevention with prepared statements
+- XSS protection with input sanitization
 
-## Installation Instructions
+## 📧 Email System
 
-### Prerequisites
-- Web server (Apache/Nginx)
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Mail server configuration (for email notifications)
+### SMTP Configuration
+- **Provider**: Gmail SMTP
+- **Security**: STARTTLS encryption
+- **Authentication**: OAuth2 compatible
+- **Features**: Automated task assignment notifications
 
-### Setup Steps
+### Email Templates
+- Task assignment notifications
+- Status update alerts
+- Due date reminders
 
-1. **Database Setup**
-   - Create a MySQL database named `task_management`
-   - Import the schema from `database/schema.sql`
-   - Update database credentials in `config/database.php`
+## 🎨 User Interface
 
-2. **Web Server Configuration**
-   - Copy the project to your web server's document root
-   - Ensure the `public` folder is set as the document root or create a virtual host
-   - Make sure the `logs` directory is writable
+### Dashboard Features
+- **Statistics Cards**: Total tasks, users, completion rates
+- **Recent Activity**: Latest task updates and assignments
+- **Quick Actions**: Add tasks, manage users
+- **Responsive Design**: Mobile-friendly interface
 
-3. **Configuration**
-   - Update email settings in `app/Services/EmailService.php`
+### Task Management
+- **CRUD Operations**: Create, read, update, delete tasks
+- **Status Tracking**: Visual status indicators
+- **Priority Levels**: Color-coded priority system
+- **Due Date Management**: Calendar integration
+
+## 🚀 Deployment Process
+
+### Automatic Deployment
+The application is configured for automatic deployment on Render.com:
+
+1. **Git Push** triggers deployment
+2. **Dependencies** installed via Composer
+3. **Database** automatically provisioned (PostgreSQL)
+4. **Environment** configured from `render.yaml`
+
+### Manual Deployment Steps
+1. Ensure all code is committed to Git
+2. Push to GitHub repository
+3. Connect repository to Render.com
+4. Configure environment variables
+5. Deploy and access live URL
+
+## 🎯 Cytonn Internship Challenge
+
+This project demonstrates:
+- **Full-Stack Development**: Complete web application with modern UI
+- **Database Design**: Efficient schema with proper relationships
+- **Cloud Deployment**: Professional hosting on Render.com
+- **Email Integration**: Automated notification system
+- **Security Best Practices**: Authentication and data protection
+- **Code Quality**: Clean, documented, maintainable code
+
+## 📝 API Endpoints
+
+### Task Management
+- `POST /api/delete-task.php` - Delete task
+- `POST /api/update-task-status.php` - Update task status
+
+### Authentication
+- `POST /auth/login.php` - User login
+- `GET /auth/logout.php` - User logout
+
+## 📞 Contact
+
+**Developer**: [Your Name]
+**Email**: [Your Email]
+**GitHub**: [Your GitHub Profile]
+**LinkedIn**: [Your LinkedIn Profile]
+
+---
+
+**Built with ❤️ for the Cytonn Internship Challenge**
    - Configure your web server to route requests properly
 
 4. **Access the Application**
