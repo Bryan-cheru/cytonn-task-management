@@ -5,15 +5,32 @@ class Database {
     private $username;
     private $password;
     private $port;
-    public $conn;
+    private $connection;
     private $isPostgreSQL = false;
 
     public function __construct() {
-        // Force check for DATABASE_URL environment variable
-        $database_url = $_ENV['DATABASE_URL'] ?? getenv('DATABASE_URL') ?? null;
+        // Multiple methods to check for DATABASE_URL environment variable
+        $database_url = null;
+        
+        // Method 1: $_ENV superglobal
+        if (isset($_ENV['DATABASE_URL'])) {
+            $database_url = $_ENV['DATABASE_URL'];
+        }
+        // Method 2: getenv() function
+        elseif (getenv('DATABASE_URL')) {
+            $database_url = getenv('DATABASE_URL');
+        }
+        // Method 3: $_SERVER superglobal
+        elseif (isset($_SERVER['DATABASE_URL'])) {
+            $database_url = $_SERVER['DATABASE_URL'];
+        }
         
         // Debug logging
-        error_log("DATABASE_URL check: " . ($database_url ? "Found" : "Not found"));
+        error_log("DATABASE_URL detection methods:");
+        error_log("  \$_ENV: " . (isset($_ENV['DATABASE_URL']) ? "Found" : "Not found"));
+        error_log("  getenv(): " . (getenv('DATABASE_URL') ? "Found" : "Not found"));
+        error_log("  \$_SERVER: " . (isset($_SERVER['DATABASE_URL']) ? "Found" : "Not found"));
+        error_log("  Final result: " . ($database_url ? "Found" : "Not found"));
         
         if ($database_url && strpos($database_url, 'postgres://') === 0) {
             // Production environment (Render.com with PostgreSQL)
@@ -25,8 +42,8 @@ class Database {
             $this->password = $url['pass'];
             $this->isPostgreSQL = true;
             
-            // Debug logging
-            error_log("PostgreSQL config - Host: {$this->host}, Port: {$this->port}, DB: {$this->db_name}");
+            // Debug logging (without password)
+            error_log("PostgreSQL config - Host: {$this->host}, Port: {$this->port}, DB: {$this->db_name}, User: {$this->username}");
         } else {
             // Local development environment (MySQL)
             $this->host = 'localhost';
@@ -39,10 +56,13 @@ class Database {
             // Debug logging
             error_log("MySQL config - Host: {$this->host}, Port: {$this->port}, DB: {$this->db_name}");
         }
+        
+        // Establish connection immediately in constructor
+        $this->establishConnection();
     }
 
-    public function getConnection() {
-        $this->conn = null;
+    private function establishConnection() {
+        $this->connection = null;
 
         try {
             if ($this->isPostgreSQL) {
@@ -55,7 +75,7 @@ class Database {
                 error_log("Attempting MySQL connection with DSN: " . $dsn);
             }
             
-            $this->conn = new PDO($dsn, $this->username, $this->password, [
+            $this->connection = new PDO($dsn, $this->username, $this->password, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_TIMEOUT => 30
@@ -63,9 +83,9 @@ class Database {
             
             // Set timezone
             if ($this->isPostgreSQL) {
-                $this->conn->exec("SET timezone = 'UTC'");
+                $this->connection->exec("SET timezone = 'UTC'");
             } else {
-                $this->conn->exec("SET time_zone = '+00:00'");
+                $this->connection->exec("SET time_zone = '+00:00'");
             }
             
             error_log("Database connection successful!");
@@ -74,10 +94,38 @@ class Database {
             error_log("Database connection error: " . $exception->getMessage());
             error_log("DSN used: " . $dsn);
             error_log("Username: " . $this->username);
-            throw new Exception("Database connection failed: " . $exception->getMessage());
+            die("Database connection failed: " . $exception->getMessage());
         }
+    }
 
-        return $this->conn;
+    public function getConnection() {
+        return $this->connection;
+    }
+    
+    // Add methods to match the local database.php structure
+    public function prepare($sql) {
+        return $this->connection->prepare($sql);
+    }
+
+    public function execute($sql, $params = []) {
+        $stmt = $this->connection->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    public function fetch($sql, $params = []) {
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetch();
+    }
+
+    public function fetchAll($sql, $params = []) {
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    public function lastInsertId() {
+        return $this->connection->lastInsertId();
     }
     
     public function isPostgreSQL() {
@@ -86,8 +134,6 @@ class Database {
     
     public function setupDatabase() {
         try {
-            $db = $this->getConnection();
-            
             if ($this->isPostgreSQL) {
                 // PostgreSQL setup for Render.com
                 $schema = file_get_contents(__DIR__ . '/../database/postgres-schema.sql');
@@ -97,7 +143,7 @@ class Database {
             }
             
             // Execute schema
-            $db->exec($schema);
+            $this->connection->exec($schema);
             
             return true;
         } catch (Exception $e) {
@@ -108,8 +154,7 @@ class Database {
 
     public function testConnection() {
         try {
-            $conn = $this->getConnection();
-            if ($conn) {
+            if ($this->connection) {
                 error_log("Database connection test successful");
                 return true;
             }

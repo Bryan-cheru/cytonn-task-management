@@ -3,7 +3,7 @@
 // This script automatically detects the environment and sets up the database
 
 // Include the correct database configuration
-if (getenv('DATABASE_URL')) {
+if (isset($_ENV['DATABASE_URL']) || getenv('DATABASE_URL') || isset($_SERVER['DATABASE_URL'])) {
     // Production environment (Render.com with Docker)
     require_once __DIR__ . '/config/database-docker.php';
 } else {
@@ -21,7 +21,7 @@ function setupDatabase($db) {
 }
 
 // Auto-setup for Render.com deployment
-if (getenv('DATABASE_URL') && !isset($_GET['manual'])) {
+if ((isset($_ENV['DATABASE_URL']) || getenv('DATABASE_URL') || isset($_SERVER['DATABASE_URL'])) && !isset($_GET['manual'])) {
     $db = new Database();
     if (setupDatabase($db)) {
         echo "Database setup completed successfully for Render.com deployment.";
