@@ -153,6 +153,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$hasAdmins) {
                         </a>
                     </div>
                 </div>
+                
+                <!-- Emergency Admin Creation for Brian -->
+                <?php if (isset($_GET['emergency']) && $_GET['emergency'] === 'brian'): ?>
+                    <div class="alert alert-warning mt-3">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Emergency Admin Creation</h6>
+                        <p class="mb-2">Create/update Brian's admin account:</p>
+                        
+                        <?php
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_brian'])) {
+                            try {
+                                $name = "Brian Cheruiyot";
+                                $email = "briancheruiyot501@gmail.com";
+                                $password = "@Bryan2213";
+                                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                                
+                                // Try to update first, then insert if no rows affected
+                                $stmt = $db->prepare("UPDATE users SET password = ?, role = 'admin', name = ? WHERE email = ?");
+                                $stmt->execute([$hashedPassword, $name, $email]);
+                                
+                                if ($stmt->rowCount() === 0) {
+                                    // User doesn't exist, create new one
+                                    $stmt = $db->prepare("INSERT INTO users (name, email, password, role, created_at) VALUES (?, ?, ?, 'admin', NOW())");
+                                    $stmt->execute([$name, $email, $hashedPassword]);
+                                }
+                                
+                                echo '<div class="alert alert-success mt-2">✅ Brian\'s admin account created/updated successfully!</div>';
+                            } catch (Exception $e) {
+                                echo '<div class="alert alert-danger mt-2">❌ Error: ' . htmlspecialchars($e->getMessage()) . '</div>';
+                            }
+                        }
+                        ?>
+                        
+                        <form method="POST" class="mt-2">
+                            <button type="submit" name="create_brian" class="btn btn-warning btn-sm">
+                                <i class="fas fa-user-plus"></i> Create Brian's Admin Account
+                            </button>
+                        </form>
+                        <small class="text-muted">Email: briancheruiyot501@gmail.com | Password: @Bryan2213</small>
+                    </div>
+                <?php endif; ?>
             <?php else: ?>
                 <?php if (isset($success)): ?>
                     <div class="alert alert-success">
