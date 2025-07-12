@@ -32,7 +32,7 @@ class Database {
         error_log("  \$_SERVER: " . (isset($_SERVER['DATABASE_URL']) ? "Found (value: " . substr($_SERVER['DATABASE_URL'], 0, 20) . "...)" : "Not found"));
         error_log("  Final result: " . ($database_url ? "Found (length: " . strlen($database_url) . ")" : "Not found"));
         
-        if ($database_url && strpos($database_url, 'postgres://') === 0) {
+        if ($database_url && (strpos($database_url, 'postgres://') === 0 || strpos($database_url, 'postgresql://') === 0)) {
             // Production environment (Render.com with PostgreSQL)
             $url = parse_url($database_url);
             $this->host = $url['host'];
