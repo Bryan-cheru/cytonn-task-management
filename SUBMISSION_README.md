@@ -1,8 +1,10 @@
 # Cytonn Task Management System
 ## Software Engineering Internship - Coding Challenge Submission
 
-**Submitted by:** [Your Name]  
-**Email:** [Your Email]  
+**Submitted by:** Bryan Cheruiyot  
+**Email:** briancheruiyot501@gmail.com  
+**GitHub:** https://github.com/Bryan-cheru/cytonn-task-management  
+**Live Demo:** [Will be deployed on hosting platform]  
 **Date:** July 12, 2025  
 **Challenge Deadline:** July 15, 2025
 
@@ -231,3 +233,42 @@ The system is ready for immediate use and can serve as a foundation for enterpri
 ---
 
 **Thank you for this exciting challenge opportunity!**
+
+---
+
+## 🌐 **Deployment Options**
+
+### **Why Not GitHub Pages?**
+GitHub Pages only supports static websites (HTML/CSS/JS), but this is a dynamic PHP application requiring server-side processing.
+
+### **Recommended Hosting Platforms for PHP:**
+
+#### **Free Options:**
+1. **InfinityFree** (https://infinityfree.net/)
+   - Free PHP hosting with MySQL
+   - No ads, good performance
+   - Perfect for demonstrations
+
+2. **000WebHost** (https://000webhost.com/)
+   - Free hosting with PHP 8.0 support
+   - MySQL database included
+   - Easy deployment
+
+3. **Heroku** (with PHP buildpack)
+   - Git-based deployment
+   - Free tier available
+   - Professional platform
+
+#### **Paid Options (Recommended for Production):**
+1. **DigitalOcean** ($5/month)
+2. **Linode** ($5/month)
+3. **AWS EC2** (Variable pricing)
+4. **VPS hosting providers**
+
+### **Quick Deployment Steps:**
+1. Choose a hosting provider
+2. Upload files via FTP/Git
+3. Import the SQL database
+4. Update database credentials in `config/database.php`
+5. Configure email SMTP settings
+6. Run `setup-production.php` for initialization
