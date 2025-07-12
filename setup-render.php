@@ -1,11 +1,11 @@
 <?php
-// Database setup for Render.com deployment
+// Database setup for Docker deployment on Render.com
 // This script automatically detects the environment and sets up the database
 
 // Include the correct database configuration
-if (isset($_ENV['DATABASE_URL'])) {
-    // Production environment (Render.com)
-    require_once __DIR__ . '/config/database-render.php';
+if (getenv('DATABASE_URL')) {
+    // Production environment (Render.com with Docker)
+    require_once __DIR__ . '/config/database-docker.php';
 } else {
     // Local development
     require_once __DIR__ . '/config/database.php';
@@ -13,18 +13,7 @@ if (isset($_ENV['DATABASE_URL'])) {
 
 function setupDatabase($db) {
     try {
-        if ($db->isPostgreSQL()) {
-            // PostgreSQL setup for Render.com
-            $schema = file_get_contents(__DIR__ . '/database/postgres-schema.sql');
-        } else {
-            // MySQL setup for local development
-            $schema = file_get_contents(__DIR__ . '/database/cytonn_task_management.sql');
-        }
-        
-        // Execute schema
-        $db->getConnection()->exec($schema);
-        
-        return true;
+        return $db->setupDatabase();
     } catch (Exception $e) {
         error_log("Database setup error: " . $e->getMessage());
         return false;
@@ -32,7 +21,7 @@ function setupDatabase($db) {
 }
 
 // Auto-setup for Render.com deployment
-if (isset($_ENV['DATABASE_URL']) && !isset($_GET['manual'])) {
+if (getenv('DATABASE_URL') && !isset($_GET['manual'])) {
     $db = new Database();
     if (setupDatabase($db)) {
         echo "Database setup completed successfully for Render.com deployment.";

@@ -52,10 +52,14 @@ task-management-system/
 │       └── EmailService.php  # SMTP email notifications
 ├── config/
 │   ├── database.php          # MySQL configuration
-│   └── database-render.php   # PostgreSQL configuration
+│   ├── database-render.php   # PostgreSQL configuration
+│   └── database-docker.php   # Docker database configuration
 ├── database/
 │   ├── cytonn_task_management.sql  # MySQL schema
 │   └── postgres-schema.sql         # PostgreSQL schema
+├── docker/
+│   ├── apache.conf           # Apache configuration for Docker
+│   └── entrypoint.sh         # Docker startup script
 ├── public/
 │   ├── index.php            # Application entry point
 │   ├── dashboard.php        # Main dashboard interface
@@ -68,9 +72,11 @@ task-management-system/
 │   └── api/
 │       ├── delete-task.php       # Task deletion endpoint
 │       └── update-task-status.php # Status update endpoint
-├── composer.json            # Dependencies and autoloading
-├── render.yaml             # Render.com deployment config
-└── setup-render.php       # Database setup for deployment
+├── Dockerfile              # Docker container configuration
+├── .dockerignore           # Docker build exclusions
+├── composer.json           # Dependencies and autoloading
+├── render.yaml            # Render.com deployment config
+└── setup-render.php      # Database setup for deployment
 ```
 
 ## 🔧 Installation & Setup
@@ -105,27 +111,28 @@ task-management-system/
    - Use App Password for Gmail authentication
 
 6. **Access Application**
-### Cloud Deployment (Render.com)
+### Cloud Deployment (Render.com with Docker)
 
 1. **Push to GitHub**
    ```bash
    git add .
-   git commit -m "Deploy to Render.com"
+   git commit -m "Deploy to Render.com with Docker"
    git push origin main
    ```
 
 2. **Render.com Setup**
+   - Choose **"Docker"** as the environment
    - Connect GitHub repository
-   - Service will auto-deploy using `render.yaml`
+   - Service will auto-deploy using `Dockerfile` and `render.yaml`
    - PostgreSQL database will be automatically configured
 
 3. **Environment Variables**
    ```
-   EMAIL_HOST=smtp.gmail.com
-   EMAIL_PORT=587
    EMAIL_USERNAME=your-email@gmail.com
    EMAIL_PASSWORD=your-app-password
    ```
+   
+   (EMAIL_HOST and EMAIL_PORT are pre-configured in render.yaml)
 
 ## 💾 Database Schema
 
