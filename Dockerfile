@@ -41,5 +41,8 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port 80
 EXPOSE 80
 
+# Ensure DATABASE_URL is available to Apache/PHP
+ENV DATABASE_URL=${DATABASE_URL}
+
 # Use custom entrypoint
 ENTRYPOINT ["./docker/entrypoint.sh"]
