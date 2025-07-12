@@ -13,24 +13,24 @@ class Database {
         $database_url = null;
         
         // Method 1: $_ENV superglobal
-        if (isset($_ENV['DATABASE_URL'])) {
+        if (isset($_ENV['DATABASE_URL']) && !empty($_ENV['DATABASE_URL'])) {
             $database_url = $_ENV['DATABASE_URL'];
         }
         // Method 2: getenv() function
-        elseif (getenv('DATABASE_URL')) {
+        elseif (getenv('DATABASE_URL') && !empty(getenv('DATABASE_URL'))) {
             $database_url = getenv('DATABASE_URL');
         }
         // Method 3: $_SERVER superglobal
-        elseif (isset($_SERVER['DATABASE_URL'])) {
+        elseif (isset($_SERVER['DATABASE_URL']) && !empty($_SERVER['DATABASE_URL'])) {
             $database_url = $_SERVER['DATABASE_URL'];
         }
         
-        // Debug logging
+        // Debug logging with actual values
         error_log("DATABASE_URL detection methods:");
-        error_log("  \$_ENV: " . (isset($_ENV['DATABASE_URL']) ? "Found" : "Not found"));
-        error_log("  getenv(): " . (getenv('DATABASE_URL') ? "Found" : "Not found"));
-        error_log("  \$_SERVER: " . (isset($_SERVER['DATABASE_URL']) ? "Found" : "Not found"));
-        error_log("  Final result: " . ($database_url ? "Found" : "Not found"));
+        error_log("  \$_ENV: " . (isset($_ENV['DATABASE_URL']) ? "Found (value: " . substr($_ENV['DATABASE_URL'], 0, 20) . "...)" : "Not found"));
+        error_log("  getenv(): " . (getenv('DATABASE_URL') ? "Found (value: " . substr(getenv('DATABASE_URL'), 0, 20) . "...)" : "Not found"));
+        error_log("  \$_SERVER: " . (isset($_SERVER['DATABASE_URL']) ? "Found (value: " . substr($_SERVER['DATABASE_URL'], 0, 20) . "...)" : "Not found"));
+        error_log("  Final result: " . ($database_url ? "Found (length: " . strlen($database_url) . ")" : "Not found"));
         
         if ($database_url && strpos($database_url, 'postgres://') === 0) {
             // Production environment (Render.com with PostgreSQL)

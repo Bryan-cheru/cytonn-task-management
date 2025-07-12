@@ -42,7 +42,16 @@ done
 # Run database setup if DATABASE_URL is set
 if [ ! -z "$DATABASE_URL" ]; then
     echo "Setting up database..."
+    echo "DATABASE_URL is: ${DATABASE_URL:0:30}..." # Show first 30 chars for debugging
     php -f setup-render.php || echo "Database setup completed or already exists"
+else
+    echo "No DATABASE_URL found, skipping database setup"
+fi
+
+# Export DATABASE_URL for Apache/PHP if it exists
+if [ ! -z "$DATABASE_URL" ]; then
+    export DATABASE_URL="$DATABASE_URL"
+    echo "Exported DATABASE_URL to environment"
 fi
 
 # Ensure proper permissions
@@ -53,6 +62,6 @@ chmod -R 755 /var/www/html
 echo "Testing Apache configuration..."
 apache2ctl configtest
 
-# Start Apache
+# Start Apache with environment variables
 echo "Starting Apache server..."
 exec apache2-foreground
