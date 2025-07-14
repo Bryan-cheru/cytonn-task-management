@@ -4,7 +4,7 @@ $database_url = $_ENV['DATABASE_URL'] ?? $_SERVER['DATABASE_URL'] ?? getenv('DAT
 
 if ($database_url) {
     // Production environment (Render.com with Docker)
-    require_once __DIR__ . '/../../config/database-docker.php';
+    require_once __DIR__ . '/../../config/database-render.php';
 } else {
     // Local development environment
     require_once __DIR__ . '/../../config/database.php';

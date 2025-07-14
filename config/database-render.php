@@ -82,5 +82,23 @@ class Database {
     public function isMySQL() {
         return strpos($this->connection->getAttribute(PDO::ATTR_DRIVER_NAME), 'mysql') !== false;
     }
+
+    // Additional methods for compatibility
+    public function execute($sql, $params = []) {
+        $stmt = $this->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    public function fetch($sql, $params = []) {
+        $stmt = $this->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetch();
+    }
+
+    public function fetchAll($sql, $params = []) {
+        $stmt = $this->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
 }
 ?>
