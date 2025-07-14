@@ -1,4 +1,4 @@
-# Cytonn Task Management System - Dependencies and Temporary Files
+# Cytonn Task Management System - Clean Production Build
 # Ignore system files and sensitive data
 
 # System Files
@@ -18,6 +18,31 @@ cache/
 # IDE and Editor Files
 .vscode/
 .idea/
+
+# Development and Test Files (to prevent future clutter)
+debug*.php
+test*.php
+*-debug.php
+*-test.php
+create-*.php
+setup-*.php
+emergency*.php
+manual*.php
+direct*.php
+database-browser.php
+reset-database.php
+init-db.php
+hello.php
+env-test.php
+
+# Duplicate Files
+*-old.php
+*-new.php
+*-backup.php
+
+# Build artifacts
+render.exe
+*.exe
 *.sublime-*
 *.swp
 *.swo
