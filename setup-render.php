@@ -2,14 +2,8 @@
 // Database setup for Docker deployment on Render.com
 // This script automatically detects the environment and sets up the database
 
-// Include the correct database configuration
-if (isset($_ENV['DATABASE_URL']) || getenv('DATABASE_URL') || isset($_SERVER['DATABASE_URL'])) {
-    // Production environment (Render.com with Docker)
-    require_once __DIR__ . '/config/database-docker.php';
-} else {
-    // Local development
-    require_once __DIR__ . '/config/database.php';
-}
+// Include the unified database configuration
+require_once __DIR__ . '/config/database-unified.php';
 
 function setupDatabase($db) {
     try {

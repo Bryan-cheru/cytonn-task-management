@@ -1,5 +1,6 @@
 <?php
-// Database configuration for Render.com deployment
+// Unified Database configuration for all environments
+// Automatically detects and handles both local development and cloud deployment
 class Database {
     private $host;
     private $dbname;

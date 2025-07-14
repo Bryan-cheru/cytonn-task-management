@@ -1,14 +1,6 @@
 <?php
-// Include the correct database configuration for the environment
-$database_url = $_ENV['DATABASE_URL'] ?? $_SERVER['DATABASE_URL'] ?? getenv('DATABASE_URL') ?? null;
-
-if ($database_url) {
-    // Production environment (Render.com with Docker)
-    require_once __DIR__ . '/../../config/database-render.php';
-} else {
-    // Local development environment
-    require_once __DIR__ . '/../../config/database.php';
-}
+// Include the unified database configuration that handles all environments
+require_once __DIR__ . '/../../config/database-unified.php';
 
 class Task {
     private $db;
