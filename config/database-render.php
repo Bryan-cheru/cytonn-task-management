@@ -9,9 +9,11 @@ class Database {
 
     public function __construct() {
         // Check if we're on Render.com (they provide DATABASE_URL)
-        if (isset($_ENV['DATABASE_URL'])) {
+        $database_url = $_ENV['DATABASE_URL'] ?? $_SERVER['DATABASE_URL'] ?? getenv('DATABASE_URL') ?? null;
+        
+        if ($database_url) {
             // Parse Render.com database URL
-            $db_url = parse_url($_ENV['DATABASE_URL']);
+            $db_url = parse_url($database_url);
             $this->host = $db_url['host'];
             $this->dbname = ltrim($db_url['path'], '/');
             $this->username = $db_url['user'];

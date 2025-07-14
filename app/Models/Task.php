@@ -1,6 +1,8 @@
 <?php
 // Include the correct database configuration for the environment
-if (isset($_ENV['DATABASE_URL']) || getenv('DATABASE_URL') || isset($_SERVER['DATABASE_URL'])) {
+$database_url = $_ENV['DATABASE_URL'] ?? $_SERVER['DATABASE_URL'] ?? getenv('DATABASE_URL') ?? null;
+
+if ($database_url) {
     // Production environment (Render.com with Docker)
     require_once __DIR__ . '/../../config/database-docker.php';
 } else {
