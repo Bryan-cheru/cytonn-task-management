@@ -1,23 +1,19 @@
 #!/bin/bash
 set -e
 
-# Docker entrypoint script for Render.com deployment
-echo "Starting Cytonn Task Management System..."
+# Railway deployment entrypoint
+echo "Starting Cytonn Task Management System on Railway..."
 
-# Function to check database connectivity
-check_database() {
-    if [ ! -z "$DATABASE_URL" ]; then
-        echo "Checking database connection..."
-        php -r "
-        try {
-            \$url = parse_url('$DATABASE_URL');
-            \$pdo = new PDO('pgsql:host='.\$url['host'].';port='.(\$url['port']??5432).';dbname='.ltrim(\$url['path'], '/'), \$url['user'], \$url['pass']);
-            echo 'Database connection successful\n';
-            exit(0);
-        } catch (Exception \$e) {
-            echo 'Database connection failed: ' . \$e->getMessage() . '\n';
-            exit(1);
-        }
+# Create necessary directories
+mkdir -p /var/log/apache2 /var/run/apache2 /var/lock/apache2 /var/www/html/logs
+
+# Set proper permissions
+chown -R www-data:www-data /var/www/html /var/log/apache2 /var/run/apache2 /var/lock/apache2
+chmod -R 755 /var/www/html
+
+# Start Apache in foreground
+echo "Starting Apache server..."
+exec apache2-foreground
         " || return 1
     fi
     return 0

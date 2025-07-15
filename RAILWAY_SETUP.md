@@ -19,6 +19,10 @@ EMAIL_USERNAME=your-gmail@gmail.com
 EMAIL_PASSWORD=your-app-password
 ```
 
+## Health Check Endpoints:
+- `/health-simple` - Simple OK response (used by Railway)
+- `/health-debug` - Detailed health information for debugging
+
 ## Custom Domain (Optional):
 - Go to your service settings
 - Click "Settings" → "Domains"
