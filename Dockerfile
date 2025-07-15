@@ -33,13 +33,13 @@ COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/security.conf /etc/apache2/conf-available/security.conf
 RUN a2enconf security
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod +x docker/entrypoint.sh
-
 # Expose port 80
 EXPOSE 80
+
+# Create necessary directories and set permissions
+RUN mkdir -p /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
+    && chown -R www-data:www-data /var/www/html /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
+    && chmod -R 755 /var/www/html
 
 # Pass environment variables to Apache
 ENV APACHE_RUN_USER=www-data
@@ -49,5 +49,5 @@ ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
 ENV APACHE_RUN_DIR=/var/run/apache2
 ENV APACHE_LOCK_DIR=/var/lock/apache2
 
-# Use custom entrypoint
-ENTRYPOINT ["./docker/entrypoint.sh"]
+# Start Apache directly instead of using entrypoint
+CMD ["apache2-foreground"]
