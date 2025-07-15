@@ -1,6 +1,6 @@
 <?php
 // Simple Admin Creator for Live Website
-// Visit: https://cytonn-task-management.onrender.com/create-admin-live.php
+// Visit: [your-domain]/create-admin-live.php
 // Use this to create admin accounts on your live website
 
 header('Content-Type: text/html; charset=UTF-8');
