@@ -1,3 +1,4 @@
+<?php http_response_code(200); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
