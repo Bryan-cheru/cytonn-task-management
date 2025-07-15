@@ -40,7 +40,7 @@ EXPOSE 80
 RUN mkdir -p /var/run/apache2 /var/lock/apache2 /var/log/apache2 /var/www/html/logs \
     && chown -R www-data:www-data /var/www/html /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
     && chmod -R 755 /var/www/html \
-    && chmod +x /var/www/html/railway-start.sh
+    && chmod +x /var/www/html/render-start.sh
 
 # Pass environment variables to Apache
 ENV APACHE_RUN_USER=www-data
@@ -50,5 +50,5 @@ ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
 ENV APACHE_RUN_DIR=/var/run/apache2
 ENV APACHE_LOCK_DIR=/var/lock/apache2
 
-# Use Railway startup script
-CMD ["./railway-start.sh"]
+# Use Render startup script
+CMD ["./render-start.sh"]

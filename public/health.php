@@ -14,7 +14,7 @@ try {
     
     // Try to check database connection
     try {
-        require_once __DIR__ . '/config/database-unified.php';
+        require_once __DIR__ . '/../config/database-unified.php';
         $status['database'] = 'connected';
     } catch (Exception $e) {
         $status['database'] = 'error: ' . $e->getMessage();

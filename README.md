@@ -3,8 +3,13 @@
 A modern, feature-rich task management system built with PHP, MySQL/PostgreSQL, and Vue.js. Designed for the Cytonn Internship Challenge.
 
 ## 🚀 Live Demo
-- **Production URL**: [Will be available after Render.com deployment]
+- **Production URL**: [Deployed on Render.com]
 - **Local Development**: http://localhost/cytonn/task-management-system/public/
+
+## 📦 Deployment Options
+- **Render.com**: See `RENDER_SETUP.md` for complete instructions
+- **Railway**: See `RAILWAY_SETUP.md` for Railway deployment
+- **Local Docker**: Use included Dockerfile and docker-compose.yml
 
 ## ✨ Features
 
